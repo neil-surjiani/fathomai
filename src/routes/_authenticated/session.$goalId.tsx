@@ -199,7 +199,14 @@ function Session() {
 
         {data.moduleResources.length ? (
           <section className="panel p-6">
-            <h3 className="text-sm font-medium">Use these resources</h3>
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-sm font-medium">Use these resources</h3>
+              <Button variant="ghost" size="sm" onClick={() => research.mutate(true)} disabled={research.isPending}>
+                {research.isPending ? <Loader2 className="size-3.5 animate-spin" /> : null}
+                Find more
+              </Button>
+            </div>
+
             <ul className="mt-4 space-y-2.5">
               {data.moduleResources.map((r) => (
                 <li key={r.id} className="flex items-start justify-between gap-3 rounded-lg border border-border bg-surface p-3.5">
