@@ -76,10 +76,18 @@ function Resources() {
         </div>
 
         {items.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            No resources of this type yet. Resources are researched module by module as you advance, so they stay
-            current.
-          </p>
+          <div>
+            <p className="text-sm text-muted-foreground">
+              {research.isPending
+                ? "Searching the web for free videos, documentation and courses, then verifying every link…"
+                : "No resources of this type yet. Resources are researched module by module as you advance, so they stay current."}
+            </p>
+            <Button className="mt-4" onClick={() => research.mutate()} disabled={research.isPending}>
+              {research.isPending ? <Loader2 className="size-4 animate-spin" /> : null}
+              {research.isPending ? "Researching…" : "Find resources now"}
+            </Button>
+          </div>
+
         ) : (
           <div className="grid gap-3 lg:grid-cols-2">
             {items.map((item) => {
