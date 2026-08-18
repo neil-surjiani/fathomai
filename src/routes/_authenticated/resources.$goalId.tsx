@@ -1,14 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { CheckCircle2, ExternalLink, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { AppShell } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { listResources, markResourceDone } from "@/lib/fathom.functions";
+import { findResources, listResources, markResourceDone } from "@/lib/fathom.functions";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/_authenticated/resources/$goalId")({
   head: () => ({
