@@ -241,7 +241,21 @@ function Session() {
               ))}
             </ul>
           </section>
-        ) : null}
+        ) : (
+          <section className="panel p-6">
+            <h3 className="text-sm font-medium">Use these resources</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {research.isPending
+                ? "Searching the web for free videos, docs and courses for this module, then checking every link resolves…"
+                : "No verified resources attached to this module yet."}
+            </p>
+            <Button className="mt-4" onClick={() => research.mutate(true)} disabled={research.isPending}>
+              {research.isPending ? <Loader2 className="size-4 animate-spin" /> : null}
+              {research.isPending ? "Researching…" : "Find resources"}
+            </Button>
+          </section>
+        )}
+
 
         <section className="panel p-6">
           <div className="flex items-baseline justify-between">
