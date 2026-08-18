@@ -44,8 +44,31 @@ function Session() {
   const submit = useServerFn(submitAnswers);
   const notes = useServerFn(makeNotes);
   const markDone = useServerFn(markResourceDone);
+  const find = useServerFn(findResources);
 
   const { data, isLoading } = useQuery({ queryKey: ["session", goalId], queryFn: () => load({ data: { goalId } }) });
+
+  const research = useMutation({
+    mutationFn: (force: boolean) =>
+      find({ data: { goalId, moduleId: data?.session.module_id ?? null, force } }),
+    onSuccess: (res: { added: number }) => {
+      qc.invalidateQueries({ queryKey: ["session", goalId] });
+      qc.invalidateQueries({ queryKey: ["resources", goalId] });
+      if (res.added === 0) toast.error("Couldn't verify any resources this time — try again.");
+      else toast.success(`Found ${res.added} verified resources`);
+    },
+    onError: () => toast.error("Resource research failed — try again."),
+  });
+
+  const autoFetched = useRef(false);
+  useEffect(() => {
+    if (!data || autoFetched.current) return;
+    if (data.moduleResources.length === 0 && data.session.module_id) {
+      autoFetched.current = true;
+      research.mutate(false);
+    }
+  }, [data]);
+
 
   const [seconds, setSeconds] = useState(0);
   const [running, setRunning] = useState(true);
