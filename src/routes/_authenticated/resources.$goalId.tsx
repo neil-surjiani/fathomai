@@ -1,14 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { CheckCircle2, ExternalLink, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { AppShell } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { listResources, markResourceDone } from "@/lib/fathom.functions";
+import { findResources, listResources, markResourceDone } from "@/lib/fathom.functions";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/_authenticated/resources/$goalId")({
   head: () => ({
@@ -32,6 +34,18 @@ function Resources() {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>("all");
 
   const { data, isLoading } = useQuery({ queryKey: ["resources", goalId], queryFn: () => load({ data: { goalId } }) });
+
+  const find = useServerFn(findResources);
+  const research = useMutation({
+    mutationFn: () => find({ data: { goalId, force: true } }),
+    onSuccess: (res: { added: number }) => {
+      qc.invalidateQueries({ queryKey: ["resources", goalId] });
+      if (res.added === 0) toast.error("Couldn't verify any resources this time — try again.");
+      else toast.success(`Found ${res.added} verified resources`);
+    },
+    onError: () => toast.error("Resource research failed — try again."),
+  });
+
 
   if (isLoading || !data) {
     return (
@@ -76,10 +90,18 @@ function Resources() {
         </div>
 
         {items.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            No resources of this type yet. Resources are researched module by module as you advance, so they stay
-            current.
-          </p>
+          <div>
+            <p className="text-sm text-muted-foreground">
+              {research.isPending
+                ? "Searching the web for free videos, documentation and courses, then verifying every link…"
+                : "No resources of this type yet. Resources are researched module by module as you advance, so they stay current."}
+            </p>
+            <Button className="mt-4" onClick={() => research.mutate()} disabled={research.isPending}>
+              {research.isPending ? <Loader2 className="size-4 animate-spin" /> : null}
+              {research.isPending ? "Researching…" : "Find resources now"}
+            </Button>
+          </div>
+
         ) : (
           <div className="grid gap-3 lg:grid-cols-2">
             {items.map((item) => {

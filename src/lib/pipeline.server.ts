@@ -244,7 +244,52 @@ export async function stageResources(db: DB, userId: string, goalId: string) {
   return { resources: counts.reduce((a, b) => a + b, 0), modulesCovered: (modules ?? []).length };
 }
 
+/**
+ * Ensures a module has real, verified resources attached. Used on demand from
+ * the session and resources screens so a module never sits empty.
+ */
+export async function ensureModuleResources(
+  db: DB,
+  userId: string,
+  goalId: string,
+  moduleId?: string | null,
+  force = false,
+) {
+  const { data: goal, error } = await db.from("learning_goals").select("*").eq("id", goalId).single();
+  if (error || !goal) throw new Error("Goal not found");
+  const ctx = ctxOfGoal(goal);
+
+  let module: { id: string; title: string; concepts: string[] } | null = null;
+  if (moduleId) {
+    const { data } = await db.from("modules").select("id, title, concepts").eq("id", moduleId).maybeSingle();
+    module = data ?? null;
+  }
+  if (!module) {
+    const { data } = await db
+      .from("modules")
+      .select("id, title, concepts")
+      .eq("goal_id", goalId)
+      .order("week_number")
+      .order("sort_order")
+      .limit(1);
+    module = data?.[0] ?? null;
+  }
+  if (!module) return { added: 0, moduleId: null as string | null };
+
+  if (!force) {
+    const { count } = await db
+      .from("module_resources")
+      .select("id", { count: "exact", head: true })
+      .eq("module_id", module.id);
+    if ((count ?? 0) > 0) return { added: 0, moduleId: module.id };
+  }
+
+  const added = await attachResources(db, userId, goalId, module, ctx);
+  return { added, moduleId: module.id };
+}
+
 export async function attachResources(
+
   db: DB,
   userId: string,
   goalId: string,

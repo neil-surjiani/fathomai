@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
-import { finishSession, getTodaySession, makeNotes, markResourceDone, startAssessment, submitAnswers } from "@/lib/fathom.functions";
+import { finishSession, findResources, getTodaySession, makeNotes, markResourceDone, startAssessment, submitAnswers } from "@/lib/fathom.functions";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/session/$goalId")({
@@ -44,8 +44,31 @@ function Session() {
   const submit = useServerFn(submitAnswers);
   const notes = useServerFn(makeNotes);
   const markDone = useServerFn(markResourceDone);
+  const find = useServerFn(findResources);
 
   const { data, isLoading } = useQuery({ queryKey: ["session", goalId], queryFn: () => load({ data: { goalId } }) });
+
+  const research = useMutation({
+    mutationFn: (force: boolean) =>
+      find({ data: { goalId, moduleId: data?.session.module_id ?? null, force } }),
+    onSuccess: (res: { added: number }) => {
+      qc.invalidateQueries({ queryKey: ["session", goalId] });
+      qc.invalidateQueries({ queryKey: ["resources", goalId] });
+      if (res.added === 0) toast.error("Couldn't verify any resources this time — try again.");
+      else toast.success(`Found ${res.added} verified resources`);
+    },
+    onError: () => toast.error("Resource research failed — try again."),
+  });
+
+  const autoFetched = useRef(false);
+  useEffect(() => {
+    if (!data || autoFetched.current) return;
+    if (data.moduleResources.length === 0 && data.session.module_id) {
+      autoFetched.current = true;
+      research.mutate(false);
+    }
+  }, [data]);
+
 
   const [seconds, setSeconds] = useState(0);
   const [running, setRunning] = useState(true);
@@ -176,7 +199,14 @@ function Session() {
 
         {data.moduleResources.length ? (
           <section className="panel p-6">
-            <h3 className="text-sm font-medium">Use these resources</h3>
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-sm font-medium">Use these resources</h3>
+              <Button variant="ghost" size="sm" onClick={() => research.mutate(true)} disabled={research.isPending}>
+                {research.isPending ? <Loader2 className="size-3.5 animate-spin" /> : null}
+                Find more
+              </Button>
+            </div>
+
             <ul className="mt-4 space-y-2.5">
               {data.moduleResources.map((r) => (
                 <li key={r.id} className="flex items-start justify-between gap-3 rounded-lg border border-border bg-surface p-3.5">
@@ -211,7 +241,21 @@ function Session() {
               ))}
             </ul>
           </section>
-        ) : null}
+        ) : (
+          <section className="panel p-6">
+            <h3 className="text-sm font-medium">Use these resources</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {research.isPending
+                ? "Searching the web for free videos, docs and courses for this module, then checking every link resolves…"
+                : "No verified resources attached to this module yet."}
+            </p>
+            <Button className="mt-4" onClick={() => research.mutate(true)} disabled={research.isPending}>
+              {research.isPending ? <Loader2 className="size-4 animate-spin" /> : null}
+              {research.isPending ? "Researching…" : "Find resources"}
+            </Button>
+          </section>
+        )}
+
 
         <section className="panel p-6">
           <div className="flex items-baseline justify-between">
