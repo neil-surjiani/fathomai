@@ -35,6 +35,18 @@ function Resources() {
 
   const { data, isLoading } = useQuery({ queryKey: ["resources", goalId], queryFn: () => load({ data: { goalId } }) });
 
+  const find = useServerFn(findResources);
+  const research = useMutation({
+    mutationFn: () => find({ data: { goalId, force: true } }),
+    onSuccess: (res: { added: number }) => {
+      qc.invalidateQueries({ queryKey: ["resources", goalId] });
+      if (res.added === 0) toast.error("Couldn't verify any resources this time — try again.");
+      else toast.success(`Found ${res.added} verified resources`);
+    },
+    onError: () => toast.error("Resource research failed — try again."),
+  });
+
+
   if (isLoading || !data) {
     return (
       <AppShell title="Resources" goalId={goalId}>
