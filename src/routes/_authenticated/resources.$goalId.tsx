@@ -112,7 +112,7 @@ function Resources() {
                   <div className="mt-4 grid grid-cols-3 gap-3 border-y border-border py-3">
                     <Score label="Relevance" value={Number(r?.relevance_score ?? 0)} />
                     <Score label="Quality" value={Number(r?.quality_score ?? 0)} />
-                    <Score label="Efficiency" value={Number(r?.efficiency_score ?? 0)} />
+                    <Score label="Hands-on" value={Number(r?.hands_on_score ?? 0)} />
                   </div>
 
                   {item.reason ? (
