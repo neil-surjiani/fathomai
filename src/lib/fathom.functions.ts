@@ -260,6 +260,21 @@ export const listResources = createServerFn({ method: "POST" })
     return { modules: modules ?? [], items: items ?? [] };
   });
 
+export const findResources = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { goalId: string; moduleId?: string | null; force?: boolean }) => data)
+  .handler(async ({ data, context }) => {
+    const { ensureModuleResources } = await import("./pipeline.server");
+    return ensureModuleResources(
+      context.supabase,
+      context.userId,
+      data.goalId,
+      data.moduleId ?? null,
+      data.force ?? false,
+    );
+  });
+
+
 export const markResourceDone = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { moduleResourceId: string; completed: boolean }) => data)
