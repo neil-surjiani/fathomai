@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
-import { finishSession, getTodaySession, makeNotes, markResourceDone, startAssessment, submitAnswers } from "@/lib/fathom.functions";
+import { finishSession, findResources, getTodaySession, makeNotes, markResourceDone, startAssessment, submitAnswers } from "@/lib/fathom.functions";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/session/$goalId")({
