@@ -106,7 +106,7 @@ export async function stageBlueprint(db: DB, userId: string, input: GoalInput) {
       deadline: input.deadline,
       budget: input.budget,
       preferred_formats: input.formats,
-      blueprint: (blueprint ?? {}) as unknown as Database["public"]["Tables"]["learning_goals"]["Insert"]["blueprint"],
+      blueprint: (blueprint ?? {}) as unknown as NonNullable<Database["public"]["Tables"]["learning_goals"]["Insert"]["blueprint"]>,
       generation_state: "building",
     })
     .select()
@@ -307,7 +307,7 @@ async function upsertResource(db: DB, c: ResourceCandidate, relevance: number) {
       title: c.title,
       provider: c.provider,
       resource_type: c.resource_type,
-      author: c.author ?? null,
+      author: (c.author ?? null) as string | null,
       duration_minutes: c.duration_minutes,
       price: c.price ?? "free",
       difficulty: c.difficulty ?? "beginner",
@@ -425,7 +425,7 @@ export async function getOrCreateTodaySession(db: DB, userId: string, goalId: st
       module_id: active?.id ?? null,
       session_date: today,
       objective: plan.objective,
-      plan: (items ?? []) as unknown as Database["public"]["Tables"]["learning_sessions"]["Insert"]["plan"],
+      plan: (items ?? []) as unknown as NonNullable<Database["public"]["Tables"]["learning_sessions"]["Insert"]["plan"]>,
       planned_minutes: goal.minutes_per_day,
     })
     .select()
@@ -564,7 +564,7 @@ export async function submitAssessment(
     user_id: userId,
     goal_id: assessment.goal_id,
     kind: "assessment_completed",
-    detail: { score: score ?? 0 } as unknown as Database["public"]["Tables"]["activity_log"]["Insert"]["detail"],
+    detail: { score: score ?? 0 } as unknown as NonNullable<Database["public"]["Tables"]["activity_log"]["Insert"]["detail"]>,
   });
 
   return { score, results };
