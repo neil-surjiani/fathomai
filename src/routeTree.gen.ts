@@ -10,33 +10,197 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedExploreRouteImport } from './routes/_authenticated/explore'
+import { Route as AuthenticatedGoalsRouteImport } from './routes/_authenticated/goals'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedKnowledgeGoalIdRouteImport } from './routes/_authenticated/knowledge.$goalId'
+import { Route as AuthenticatedProgressGoalIdRouteImport } from './routes/_authenticated/progress.$goalId'
+import { Route as AuthenticatedResourcesGoalIdRouteImport } from './routes/_authenticated/resources.$goalId'
+import { Route as AuthenticatedRoadmapGoalIdRouteImport } from './routes/_authenticated/roadmap.$goalId'
+import { Route as AuthenticatedSessionGoalIdRouteImport } from './routes/_authenticated/session.$goalId'
+import { Route as AuthenticatedTutorGoalIdRouteImport } from './routes/_authenticated/tutor.$goalId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedExploreRoute = AuthenticatedExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedGoalsRoute = AuthenticatedGoalsRouteImport.update({
+  id: '/goals',
+  path: '/goals',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedKnowledgeGoalIdRoute =
+  AuthenticatedKnowledgeGoalIdRouteImport.update({
+    id: '/knowledge/$goalId',
+    path: '/knowledge/$goalId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProgressGoalIdRoute =
+  AuthenticatedProgressGoalIdRouteImport.update({
+    id: '/progress/$goalId',
+    path: '/progress/$goalId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedResourcesGoalIdRoute =
+  AuthenticatedResourcesGoalIdRouteImport.update({
+    id: '/resources/$goalId',
+    path: '/resources/$goalId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedRoadmapGoalIdRoute =
+  AuthenticatedRoadmapGoalIdRouteImport.update({
+    id: '/roadmap/$goalId',
+    path: '/roadmap/$goalId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSessionGoalIdRoute =
+  AuthenticatedSessionGoalIdRouteImport.update({
+    id: '/session/$goalId',
+    path: '/session/$goalId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedTutorGoalIdRoute =
+  AuthenticatedTutorGoalIdRouteImport.update({
+    id: '/tutor/$goalId',
+    path: '/tutor/$goalId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/login': typeof LoginRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/explore': typeof AuthenticatedExploreRoute
+  '/goals': typeof AuthenticatedGoalsRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/knowledge/$goalId': typeof AuthenticatedKnowledgeGoalIdRoute
+  '/progress/$goalId': typeof AuthenticatedProgressGoalIdRoute
+  '/resources/$goalId': typeof AuthenticatedResourcesGoalIdRoute
+  '/roadmap/$goalId': typeof AuthenticatedRoadmapGoalIdRoute
+  '/session/$goalId': typeof AuthenticatedSessionGoalIdRoute
+  '/tutor/$goalId': typeof AuthenticatedTutorGoalIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/login': typeof LoginRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/explore': typeof AuthenticatedExploreRoute
+  '/goals': typeof AuthenticatedGoalsRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/knowledge/$goalId': typeof AuthenticatedKnowledgeGoalIdRoute
+  '/progress/$goalId': typeof AuthenticatedProgressGoalIdRoute
+  '/resources/$goalId': typeof AuthenticatedResourcesGoalIdRoute
+  '/roadmap/$goalId': typeof AuthenticatedRoadmapGoalIdRoute
+  '/session/$goalId': typeof AuthenticatedSessionGoalIdRoute
+  '/tutor/$goalId': typeof AuthenticatedTutorGoalIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/how-it-works': typeof HowItWorksRoute
+  '/login': typeof LoginRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/explore': typeof AuthenticatedExploreRoute
+  '/_authenticated/goals': typeof AuthenticatedGoalsRoute
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/knowledge/$goalId': typeof AuthenticatedKnowledgeGoalIdRoute
+  '/_authenticated/progress/$goalId': typeof AuthenticatedProgressGoalIdRoute
+  '/_authenticated/resources/$goalId': typeof AuthenticatedResourcesGoalIdRoute
+  '/_authenticated/roadmap/$goalId': typeof AuthenticatedRoadmapGoalIdRoute
+  '/_authenticated/session/$goalId': typeof AuthenticatedSessionGoalIdRoute
+  '/_authenticated/tutor/$goalId': typeof AuthenticatedTutorGoalIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/how-it-works'
+    | '/login'
+    | '/dashboard'
+    | '/explore'
+    | '/goals'
+    | '/onboarding'
+    | '/knowledge/$goalId'
+    | '/progress/$goalId'
+    | '/resources/$goalId'
+    | '/roadmap/$goalId'
+    | '/session/$goalId'
+    | '/tutor/$goalId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/how-it-works'
+    | '/login'
+    | '/dashboard'
+    | '/explore'
+    | '/goals'
+    | '/onboarding'
+    | '/knowledge/$goalId'
+    | '/progress/$goalId'
+    | '/resources/$goalId'
+    | '/roadmap/$goalId'
+    | '/session/$goalId'
+    | '/tutor/$goalId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/how-it-works'
+    | '/login'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/explore'
+    | '/_authenticated/goals'
+    | '/_authenticated/onboarding'
+    | '/_authenticated/knowledge/$goalId'
+    | '/_authenticated/progress/$goalId'
+    | '/_authenticated/resources/$goalId'
+    | '/_authenticated/roadmap/$goalId'
+    | '/_authenticated/session/$goalId'
+    | '/_authenticated/tutor/$goalId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  HowItWorksRoute: typeof HowItWorksRoute
+  LoginRoute: typeof LoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +212,134 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/explore': {
+      id: '/_authenticated/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof AuthenticatedExploreRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/goals': {
+      id: '/_authenticated/goals'
+      path: '/goals'
+      fullPath: '/goals'
+      preLoaderRoute: typeof AuthenticatedGoalsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/knowledge/$goalId': {
+      id: '/_authenticated/knowledge/$goalId'
+      path: '/knowledge/$goalId'
+      fullPath: '/knowledge/$goalId'
+      preLoaderRoute: typeof AuthenticatedKnowledgeGoalIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/progress/$goalId': {
+      id: '/_authenticated/progress/$goalId'
+      path: '/progress/$goalId'
+      fullPath: '/progress/$goalId'
+      preLoaderRoute: typeof AuthenticatedProgressGoalIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/resources/$goalId': {
+      id: '/_authenticated/resources/$goalId'
+      path: '/resources/$goalId'
+      fullPath: '/resources/$goalId'
+      preLoaderRoute: typeof AuthenticatedResourcesGoalIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/roadmap/$goalId': {
+      id: '/_authenticated/roadmap/$goalId'
+      path: '/roadmap/$goalId'
+      fullPath: '/roadmap/$goalId'
+      preLoaderRoute: typeof AuthenticatedRoadmapGoalIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/session/$goalId': {
+      id: '/_authenticated/session/$goalId'
+      path: '/session/$goalId'
+      fullPath: '/session/$goalId'
+      preLoaderRoute: typeof AuthenticatedSessionGoalIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/tutor/$goalId': {
+      id: '/_authenticated/tutor/$goalId'
+      path: '/tutor/$goalId'
+      fullPath: '/tutor/$goalId'
+      preLoaderRoute: typeof AuthenticatedTutorGoalIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedExploreRoute: typeof AuthenticatedExploreRoute
+  AuthenticatedGoalsRoute: typeof AuthenticatedGoalsRoute
+  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+  AuthenticatedKnowledgeGoalIdRoute: typeof AuthenticatedKnowledgeGoalIdRoute
+  AuthenticatedProgressGoalIdRoute: typeof AuthenticatedProgressGoalIdRoute
+  AuthenticatedResourcesGoalIdRoute: typeof AuthenticatedResourcesGoalIdRoute
+  AuthenticatedRoadmapGoalIdRoute: typeof AuthenticatedRoadmapGoalIdRoute
+  AuthenticatedSessionGoalIdRoute: typeof AuthenticatedSessionGoalIdRoute
+  AuthenticatedTutorGoalIdRoute: typeof AuthenticatedTutorGoalIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedExploreRoute: AuthenticatedExploreRoute,
+  AuthenticatedGoalsRoute: AuthenticatedGoalsRoute,
+  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+  AuthenticatedKnowledgeGoalIdRoute: AuthenticatedKnowledgeGoalIdRoute,
+  AuthenticatedProgressGoalIdRoute: AuthenticatedProgressGoalIdRoute,
+  AuthenticatedResourcesGoalIdRoute: AuthenticatedResourcesGoalIdRoute,
+  AuthenticatedRoadmapGoalIdRoute: AuthenticatedRoadmapGoalIdRoute,
+  AuthenticatedSessionGoalIdRoute: AuthenticatedSessionGoalIdRoute,
+  AuthenticatedTutorGoalIdRoute: AuthenticatedTutorGoalIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  HowItWorksRoute: HowItWorksRoute,
+  LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
